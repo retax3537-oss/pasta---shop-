@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROSSO PASTA | 이탈리안 파스타 식재료 전문몰</title>
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-soft: #fafafa;
+      --bg-tint: #fff5f5;
+      --primary-red: #d9232e;
+      --primary-red-dark: #b01822;
+      --text-main: #18181b;
+      --text-sub: #52525b;
+      --border-light: #e4e4e7;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 10px 25px rgba(217, 35, 46, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background-color: var(--bg-white);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* 상단 공지 바 */
+    .top-banner {
+      background-color: var(--primary-red);
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      letter-spacing: -0.2px;
+    }
+
+    /* 헤더 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary-red);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo span { color: var(--text-main); font-weight: 800; }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-tint);
+      border: 1px solid #fecaca;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .tier-pill {
+      background: var(--primary-red);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-light);
+      background: var(--bg-white);
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+    .btn:hover { border-color: var(--primary-red); color: var(--primary-red); }
+    .btn-red {
+      background: var(--primary-red);
+      color: #fff;
+      border-color: var(--primary-red);
+    }
+    .btn-red:hover {
+      background: var(--primary-red-dark);
+      border-color: var(--primary-red-dark);
+      color: #fff;
+    }
+
+    /* 히어로 슬라이더 */
+    .hero-slider {
+      position: relative;
+      max-width: 1200px;
+      margin: 24px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 420px;
+      box-shadow: var(--shadow-md);
+    }
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 64px;
+      color: #fff;
+    }
+    .slide img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      max-width: 540px;
+    }
+    .slide-tag {
+      display: inline-block;
+      background: var(--primary-red);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .slide-content h1 {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -0.8px;
+    }
+    .slide-content p {
+      font-size: 16px;
+      color: #f4f4f5;
+      margin-bottom: 24px;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+    .slider-btn.prev { left: 16px; }
+    .slider-btn.next { right: 16px; }
+    .slider-dots {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dot.active {
+      width: 26px;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    /* 회원 등급 안내 배너 */
+    .section {
+      max-width: 1200px;
+      margin: 48px auto;
+      padding: 0 20px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .section-title span { color: var(--primary-red); }
+    .section-sub { color: var(--text-sub); font-size: 14px; }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .tier-card {
+      background: var(--bg-soft);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .tier-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary-red);
+      background: var(--bg-white);
+    }
+    .tier-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .tier-rate { color: var(--primary-red); font-weight: 900; }
+    .tier-cond { font-size: 13px; color: var(--text-sub); }
+
+    /* 카테고리 필터 */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-white);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+    .tab-btn.active {
+      background: var(--primary-red);
+      color: #fff;
+      border-color: var(--primary-red);
+    }
+
+    /* 상품 그리드 */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .product-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: #fecaca;
+    }
+    .product-img-wrap {
+      width: 100%;
+      height: 200px;
+      background: var(--bg-tint);
+      position: relative;
+      overflow: hidden;
+    }
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-cat-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--primary-red);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .product-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .product-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .product-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+    .product-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    /* 모달 공통 */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--bg-white);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .modal-header h2 { font-size: 20px; font-weight: 800; }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-red);
+    }
+
+    /* 장바구니 & 결제 */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+      gap: 10px;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-title { font-weight: 700; font-size: 14px; }
+    .cart-item-price { font-size: 13px; color: var(--text-sub); }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .summary-box {
+      background: var(--bg-soft);
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary-red);
+      padding-top: 10px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    footer {
+      background: var(--bg-soft);
+      border-top: 1px solid var(--border-light);
+      padding: 40px 20px;
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    @media (max-width: 960px) {
+      .product-grid, .tier-grid { grid-template-columns: repeat(2, 1fr); }
+      .slide { padding: 0 32px; }
+      .slide-content h1 { font-size: 28px; }
+    }
+    @media (max-width: 560px) {
+      .product-grid, .tier-grid { grid-template-columns: 1fr; }
+      .hero-slider { height: 340px; margin: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-banner">
+    🍝 신규 회원가입 시 즉시 사용 가능한 <strong>3,000P</strong> 지급! 등급별 최대 <strong>8%</strong> 포인트 적립
+  </div>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">ROSSO<span>PASTA</span></a>
+      <div class="nav-actions">
+        <div id="userBadge" class="user-badge">
+          <span id="userTier" class="tier-pill">BRONZE</span>
+          <span id="userNameDisplay">홍길동님</span>
+          <strong style="color: var(--primary-red);" id="userPointsDisplay">3,000P</strong>
+        </div>
+        <button id="authBtn" class="btn" onclick="openModal('authModal')">회원가입 / 로그인</button>
+        <button id="logoutBtn" class="btn" style="display:none;" onclick="logout()">로그아웃</button>
+        <button class="btn btn-red" onclick="openCartModal()">
+          장바구니 (<span id="cartCount">0</span>)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 히어로 이미지 슬라이더 (4장 교차 슬라이드) -->
+  <section class="hero-slider">
+    <div class="slides" id="heroSlides">
+      <div class="slide">
+        <img src="./img/hero1.svg" alt="이탈리아 정통 듀럼밀 스파게티" />
+        <div class="slide-content">
+          <span class="slide-tag">ITALIAN AUTHENTIC</span>
+          <h1>완벽한 알덴테를 위한<br>프리미엄 스파게티 면</h1>
+          <p>이탈리아산 100% 듀럼밀 세몰리나로 빚어낸 쫄깃한 식감을 경험하세요.</p>
+          <a href="#products" class="btn btn-red">재료 둘러보기</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="./img/hero2.svg" alt="산마르자노 토마토 소스" />
+        <div class="slide-content">
+          <span class="slide-tag">RICH TOMATO</span>
+          <h1>태양을 머금은<br>산마르자노 토마토 소스</h1>
+          <p>인위적인 첨가물 없이 토마토 본연의 깊은 산미와 감칠맛을 담았습니다.</p>
+          <a href="#products" class="btn btn-red">소스 컬렉션</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="./img/hero3.svg" alt="엑스트라 버진 올리브 오일" />
+        <div class="slide-content">
+          <span class="slide-tag">COLD PRESSED</span>
+          <h1>첫 수확 올리브를 냉압착한<br>엑스트라 버진 오일</h1>
+          <p>알리오 올리오의 풍미를 완성하는 산도 0.2% 이하 최고급 올리브 오일.</p>
+          <a href="#products" class="btn btn-red">오일 & 향신료</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="./img/hero4.svg" alt="페퍼론치노 & 베이컨" />
+        <div class="slide-content">
+          <span class="slide-tag">CHEF'S SECRET</span>
+          <h1>요리의 한 끗을 바꾸는<br>페퍼론치노 & 훈연 베이컨</h1>
+          <p>깔끔한 매운맛과 짙은 훈연향으로 집에서도 레스토랑의 맛을 재현합니다.</p>
+          <a href="#products" class="btn btn-red">토핑 재료 보기</a>
+        </div>
+      </div>
+    </div>
+    <button class="slider-btn prev" onclick="moveSlide(-1)">‹</button>
+    <button class="slider-btn next" onclick="moveSlide(1)">›</button>
+    <div class="slider-dots" id="sliderDots"></div>
+  </section>
+
+  <!-- 회원 등급별 포인트 제도 안내 -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">ROSSO <span>멤버십 등급 & 포인트</span> 혜택</h2>
+        <p class="section-sub">누적 구매 금액에 따라 등급이 자동 승급되며 결제 시 포인트가 즉시 적립됩니다.</p>
+      </div>
+    </div>
+    <div class="tier-grid">
+      <div class="tier-card">
+        <h3>BRONZE <span class="tier-rate">1% 적립</span></h3>
+        <p class="tier-cond">신규 가입 회원 기본 등급 (가입 축하 3,000P)</p>
+      </div>
+      <div class="tier-card">
+        <h3>SILVER <span class="tier-rate">3% 적립</span></h3>
+        <p class="tier-cond">누적 결제 금액 50,000원 이상 달성 시</p>
+      </div>
+      <div class="tier-card">
+        <h3>GOLD <span class="tier-rate">5% 적립</span></h3>
+        <p class="tier-cond">누적 결제 금액 150,000원 이상 달성 시</p>
+      </div>
+      <div class="tier-card">
+        <h3>VIP CHEF <span class="tier-rate">8% 적립</span></h3>
+        <p class="tier-cond">누적 결제 금액 300,000원 이상 달성 시</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 상품 소개 및 판매 섹션 -->
+  <section class="section" id="products">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">엄선된 <span>파스타 재료</span> 컬렉션</h2>
+        <p class="section-sub">셰프가 직접 고른 면, 소스, 오일, 향신료, 신선 토핑까지 한 번에 만나보세요.</p>
+      </div>
+      <div class="filter-tabs" id="filterTabs">
+        <button class="tab-btn active" onclick="filterProducts('ALL', this)">전체</button>
+        <button class="tab-btn" onclick="filterProducts('면/소스', this)">면 · 소스</button>
+        <button class="tab-btn" onclick="filterProducts('오일/향신료', this)">오일 · 향신료</button>
+        <button class="tab-btn" onclick="filterProducts('토핑/채소', this)">베이컨 · 양파 · 치즈</button>
+      </div>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <footer>
+    <p><strong>ROSSO PASTA</strong> | 이탈리안 파스타 식재료 전문 온라인 스토어</p>
+    <p style="margin-top: 6px;">본 페이지는 GitHub Pages 배포용 단일 인라인 웹 애플리케이션입니다.</p>
+  </footer>
+
+  <!-- 회원가입 / 로그인 모달 -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>회원가입 / 간편 로그인</h2>
+        <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
+      </div>
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group">
+          <label>이름 (닉네임)</label>
+          <input type="text" id="regName" placeholder="예: 이주현" required />
+        </div>
+        <div class="form-group">
+          <label>이메일 아이디</label>
+          <input type="email" id="regEmail" placeholder="pasta@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>비밀번호</label>
+          <input type="password" id="regPassword" placeholder="비밀번호 입력" required />
+        </div>
+        <div class="form-group">
+          <label>체험용 초기 등급 선택 (테스트용)</label>
+          <select id="regInitialTier">
+            <option value="BRONZE">BRONZE (기본 - 1% 적립 + 3,000P)</option>
+            <option value="SILVER">SILVER (누적 5만원 - 3% 적립 + 5,000P)</option>
+            <option value="GOLD">GOLD (누적 15만원 - 5% 적립 + 10,000P)</option>
+            <option value="VIP CHEF">VIP CHEF (누적 30만원 - 8% 적립 + 20,000P)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-red" style="width: 100%; padding: 12px;">가입 및 로그인 완료</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 장바구니 및 결제 모달 -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>장바구니 & 주문 결제</h2>
+        <button class="close-btn" onclick="closeModal('cartModal')">&times;</button>
+      </div>
+      <div id="cartItemsContainer"></div>
+
+      <div id="checkoutSection" style="display:none;">
+        <div class="form-group" style="margin-top: 16px;">
+          <label>보유 포인트 사용 (<span id="availPointsText">0</span>P 사용 가능)</label>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="usePointsInput" min="0" value="0" oninput="updateCartSummary()" />
+            <button type="button" class="btn" onclick="useAllPoints()">전액 사용</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>결제 수단 선택</label>
+          <select id="paymentMethod">
+            <option value="신용/체크카드">신용 / 체크카드 간편결제</option>
+            <option value="카카오페이">카카오페이</option>
+            <option value="네이버페이">네이버페이</option>
+            <option value="무통장입금">무통장입금</option>
+          </select>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-row"><span>총 상품 금액</span><span id="subtotalText">0원</span></div>
+          <div class="summary-row"><span>포인트 할인</span><span id="discountText" style="color:var(--primary-red);">-0원</span></div>
+          <div class="summary-row"><span>적립 예정 포인트 (<span id="earnRateText">0%</span>)</span><strong id="earnPointsText">+0P</strong></div>
+          <div class="summary-total"><span>최종 결제 금액</span><span id="finalTotalText">0원</span></div>
+        </div>
+
+        <button class="btn btn-red" style="width: 100%; padding: 14px; font-size: 16px;" onclick="processPayment()">
+          결제하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. 상품 데이터 (img 폴더 내 SVG 이미지 매핑)
+    const PRODUCTS = [
+      { id: 1, name: "브론즈 다이 스파게티 면 No.5 (500g)", category: "면/소스", price: 4800, img: "./img/noodle.svg", desc: "소스가 깊게 배어드는 거친 표면의 이탈리아 정통 듀럼밀 면" },
+      { id: 2, name: "산마르자노 클래식 토마토 소스 (680g)", category: "면/소스", price: 8900, img: "./img/sauce.svg", desc: "이탈리아 남부 화산토에서 자란 토마토와 생바질로 끓인 정통 소스" },
+      { id: 3, name: "냉압착 엑스트라 버진 올리브 오일 (500ml)", category: "오일/향신료", price: 18500, img: "./img/oliveoil.svg", desc: "산도 0.18%의 신선한 풀향과 알싸한 피니시가 살아있는 최고급 오일" },
+      { id: 4, name: "이탈리아산 홀 페퍼론치노 (100g)", category: "오일/향신료", price: 5500, img: "./img/peperoncino.svg", desc: "알리오 올리오와 아라비아따에 깔끔하고 강렬한 매운맛을 더하는 건고추" },
+      { id: 5, name: "지중해 천연 굵은 바다 소금 (400g)", category: "오일/향신료", price: 4200, img: "./img/salt.svg", desc: "면 삶기(면수) 간 맞추기에 최적화된 미네랄 풍부한 이탈리아 천일염" },
+      { id: 6, name: "참나무 훈연 두툼한 통 베이컨 (300g)", category: "토핑/채소", price: 9800, img: "./img/bacon.svg", desc: "까르보나라와 토마토 파스타에 깊은 감칠맛을 내는 저염 숙성 베이컨" },
+      { id: 7, name: "국내산 당도 높은 황금 양파 (1kg)", category: "토핑/채소", price: 3900, img: "./img/onion.svg", desc: "볶을수록 은은한 단맛이 올라와 모든 파스타 베이스에 필수인 신선 양파" },
+      { id: 8, name: "24개월 숙성 파르미지아노 레지아노 (150g)", category: "토핑/채소", price: 11200, img: "./img/cheese.svg", desc: "요리 마무리 시 눈처럼 갈아 올리면 풍미를 완성하는 정통 경성 치즈" }
+    ];
+
+    // 등급 정책
+    const TIER_CONFIG = {
+      "BRONZE": { rate: 0.01, minSpend: 0, initPoints: 3000 },
+      "SILVER": { rate: 0.03, minSpend: 50000, initPoints: 5000 },
+      "GOLD": { rate: 0.05, minSpend: 150000, initPoints: 10000 },
+      "VIP CHEF": { rate: 0.08, minSpend: 300000, initPoints: 20000 }
+    };
+
+    // 상태 관리
+    let currentUser = JSON.parse(localStorage.getItem("rosso_user")) || null;
+    let cart = JSON.parse(localStorage.getItem("rosso_cart")) || [];
+    let currentSlide = 0;
+
+    // 2. 히어로 슬라이더 로직
+    const slidesEl = document.getElementById("heroSlides");
+    const dotsEl = document.getElementById("sliderDots");
+    const totalSlides = 4;
+
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement("div");
+      dot.className = "dot" + (i === 0 ? " active" : "");
+      dot.onclick = () => goToSlide(i);
+      dotsEl.appendChild(dot);
+    }
+
+    function goToSlide(index) {
+      currentSlide = (index + totalSlides) % totalSlides;
+      slidesEl.style.transform = `translateX(-${currentSlide * 100}%)`;
+      document.querySelectorAll(".dot").forEach((d, idx) => {
+        d.classList.toggle("active", idx === currentSlide);
+      });
+    }
+
+    function moveSlide(step) { goToSlide(currentSlide + step); }
+    setInterval(() => moveSlide(1), 4000);
+
+    // 3. 상품 렌더링 & 필터링
+    function renderProducts(filter = "ALL") {
+      const grid = document.getElementById("productGrid");
+      const filtered = filter === "ALL" ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+      grid.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <span class="product-cat-badge">${p.category}</span>
+            <img src="${p.img}" alt="${p.name}" />
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">${p.name}</h3>
+            <p class="product-desc">${p.desc}</p>
+            <div class="product-footer">
+              <span class="product-price">${p.price.toLocaleString()}원</span>
+              <button class="btn btn-red" onclick="addToCart(${p.id})">담기</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function filterProducts(category, btn) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderProducts(category);
+    }
+
+    // 4. 회원가입 & 등급 시스템
+    function handleAuth(e) {
+      e.preventDefault();
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const tier = document.getElementById("regInitialTier").value;
+      const tierInfo = TIER_CONFIG[tier];
+
+      currentUser = {
+        name,
+        email,
+        tier,
+        points: tierInfo.initPoints,
+        totalSpent: tierInfo.minSpend
+      };
+      saveUser();
+      updateAuthUI();
+      closeModal("authModal");
+      alert(`${name}님 환영합니다! [${tier}] 등급으로 가입되어 ${tierInfo.initPoints.toLocaleString()}P가 지급되었습니다.`);
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem("rosso_user");
+      updateAuthUI();
+    }
+
+    function saveUser() {
+      if (currentUser) localStorage.setItem("rosso_user", JSON.stringify(currentUser));
+    }
+
+    function updateAuthUI() {
+      const badge = document.getElementById("userBadge");
+      const authBtn = document.getElementById("authBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (currentUser) {
+        badge.style.display = "flex";
+        authBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        document.getElementById("userTier").textContent = currentUser.tier;
+        document.getElementById("userNameDisplay").textContent = `${currentUser.name}님`;
+        document.getElementById("userPointsDisplay").textContent = `${currentUser.points.toLocaleString()}P`;
+      } else {
+        badge.style.display = "none";
+        authBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    function recalculateTier() {
+      if (!currentUser) return;
+      const spent = currentUser.totalSpent;
+      let newTier = "BRONZE";
+      if (spent >= 300000) newTier = "VIP CHEF";
+      else if (spent >= 150000) newTier = "GOLD";
+      else if (spent >= 50000) newTier = "SILVER";
+
+      if (newTier !== currentUser.tier) {
+        currentUser.tier = newTier;
+        alert(`🎉 축하합니다! 누적 구매액 달성으로 회원 등급이 [${newTier}]로 승급되었습니다!`);
+      }
+    }
+
+    // 5. 장바구니 & 결제 로직
+    function addToCart(productId) {
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        const prod = PRODUCTS.find(p => p.id === productId);
+        cart.push({ ...prod, qty: 1 });
+      }
+      saveCart();
+      updateCartBadge();
+    }
+
+    function changeQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+      }
+      saveCart();
+      renderCart();
+      updateCartBadge();
+    }
+
+    function saveCart() {
+      localStorage.setItem("rosso_cart", JSON.stringify(cart));
+    }
+
+    function updateCartBadge() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cartCount").textContent = totalQty;
+    }
+
+    function openCartModal() {
+      renderCart();
+      openModal("cartModal");
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cartItemsContainer");
+      const checkoutSec = document.getElementById("checkoutSection");
+
+      if (cart.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-sub); padding:32px 0;">장바구니에 담긴 파스타 재료가 없습니다.</p>`;
+        checkoutSec.style.display = "none";
+        return;
+      }
+
+      checkoutSec.style.display = "block";
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-price">${(item.price * item.qty).toLocaleString()}원</div>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+            <span style="min-width:20px; text-align:center; font-weight:700;">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+      `).join("");
+
+      const avail = currentUser ? currentUser.points : 0;
+      document.getElementById("availPointsText").textContent = avail.toLocaleString();
+      document.getElementById("usePointsInput").max = avail;
+      document.getElementById("usePointsInput").value = 0;
+      updateCartSummary();
+    }
+
+    function useAllPoints() {
+      if (!currentUser) {
+        alert("포인트를 사용하려면 먼저 로그인해주세요.");
+        return;
+      }
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const maxUsable = Math.min(currentUser.points, subtotal);
+      document.getElementById("usePointsInput").value = maxUsable;
+      updateCartSummary();
+    }
+
+    function updateCartSummary() {
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const avail = currentUser ? currentUser.points : 0;
+      let usePts = parseInt(document.getElementById("usePointsInput").value, 10) || 0;
+
+      if (usePts < 0) usePts = 0;
+      if (usePts > avail) usePts = avail;
+      if (usePts > subtotal) usePts = subtotal;
+      document.getElementById("usePointsInput").value = usePts;
+
+      const finalTotal = subtotal - usePts;
+      const rate = currentUser ? TIER_CONFIG[currentUser.tier].rate : 0;
+      const earnPts = Math.floor(finalTotal * rate);
+
+      document.getElementById("subtotalText").textContent = `${subtotal.toLocaleString()}원`;
+      document.getElementById("discountText").textContent = `-${usePts.toLocaleString()}원`;
+      document.getElementById("earnRateText").textContent = `${(rate * 100).toFixed(0)}%`;
+      document.getElementById("earnPointsText").textContent = `+${earnPts.toLocaleString()}P`;
+      document.getElementById("finalTotalText").textContent = `${finalTotal.toLocaleString()}원`;
+    }
+
+    function processPayment() {
+      if (!currentUser) {
+        alert("결제 및 포인트 적립을 위해 먼저 회원가입 또는 로그인을 진행해주세요!");
+        closeModal("cartModal");
+        openModal("authModal");
+        return;
+      }
+
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const usePts = parseInt(document.getElementById("usePointsInput").value, 10) || 0;
+      const finalTotal = subtotal - usePts;
+      const rate = TIER_CONFIG[currentUser.tier].rate;
+      const earnedPts = Math.floor(finalTotal * rate);
+      const method = document.getElementById("paymentMethod").value;
+
+      currentUser.points = currentUser.points - usePts + earnedPts;
+      currentUser.totalSpent += finalTotal;
+      recalculateTier();
+      saveUser();
+      updateAuthUI();
+
+      cart = [];
+      saveCart();
+      updateCartBadge();
+      closeModal("cartModal");
+
+      alert(
+        `✅ [${method}] 결제가 완료되었습니다!\n` +
+        `• 실 결제 금액: ${finalTotal.toLocaleString()}원\n` +
+        `• 적립된 포인트: +${earnedPts.toLocaleString()}P (${currentUser.tier} 등급)\n` +
+        `• 현재 보유 포인트: ${currentUser.points.toLocaleString()}P`
+      );
+    }
+
+    // 모달 제어
+    function openModal(id) { document.getElementById(id).classList.add("open"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+    // 초기화
+    renderProducts();
+    updateAuthUI();
+    updateCartBadge();
+  </script>
+</body>
+</html>
